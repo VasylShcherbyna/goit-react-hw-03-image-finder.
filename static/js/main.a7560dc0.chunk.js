@@ -1,0 +1,2 @@
+(this["webpackJsonpgoit-react-hw-03-images-finder"]=this["webpackJsonpgoit-react-hw-03-images-finder"]||[]).push([[0],{9:function(e,t,r){"use strict";r.r(t);var c=r(1),s=r.n(c),n=r(3),a=r.n(n),i=r(0);var d=function(){return Object(i.jsx)("div",{className:"App",children:Object(i.jsx)("header",{className:"App-header",children:Object(i.jsx)("h",{children:"start"})})})};a.a.render(Object(i.jsx)(s.a.StrictMode,{children:Object(i.jsx)(d,{})}),document.getElementById("root"))}},[[9,1,2]]]);
+//# sourceMappingURL=main.a7560dc0.chunk.js.map
