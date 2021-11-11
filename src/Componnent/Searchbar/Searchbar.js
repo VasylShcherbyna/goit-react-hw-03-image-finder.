@@ -13,7 +13,6 @@ export default class Searchbar extends Component {
   handleSubmit = e => {
     e.preventDefault();
     if (this.state.imageName.trim() === '') {
-      // alert('Введите имя картинки.');
       toast.error('Введите имя картинки.');
       return;
     }
