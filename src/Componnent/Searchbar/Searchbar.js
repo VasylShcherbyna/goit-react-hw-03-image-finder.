@@ -1,43 +1,42 @@
 import { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import s from '../Styles.Module.css';
+import styles from '../Searchbar/Searchbar.module.css';
 
 export default class Searchbar extends Component {
   state = {
-    imageName: '',
+    search: '',
   };
-  handleNameChange = e => {
-    this.setState({ imageName: e.currentTarget.value.toLowerCase() });
+  handleChange = e => {
+    this.setState({ search: e.currentTarget.value.toLowerCase() });
   };
+
   handleSubmit = e => {
     e.preventDefault();
-    if (this.state.imageName.trim() === '') {
-      toast.error('Введите имя картинки.');
-      return;
+    if (this.state.search.trim() === '') {
+     return toast.error('Enter your request.');
     }
-
-    this.props.onSubmit(this.state.imageName);
-    this.setState({ imageName: '' });
+    this.props.onSubmit(this.state.search);
+    this.setState({ search: '' });
   };
 
   render() {
     return (
-      <header className={s.Searchbar}>
-        <form className={s.SearchForm} onSubmit={this.handleSubmit}>
-          <button type="submit" className={s.SearchFormButton}>
-            <span className={s.SearchFormButtonLabel}>Search</span>
+      <header className={styles.Searchbar}>
+        <form onSubmit={this.handleSubmit} className={styles.SearchForm}>
+          <button type="submit" className={styles.SearchFormButton}>
+            <span className={styles.SearchFormButtonLabel}>Search</span>
           </button>
 
           <input
-            className={s.SearchFormInput}
+            className={styles.SearchFormInput}
             type="text"
-            name="imageName"
-            autocomplete="off"
-            autofocus
+            autoComplete="off"
+            autoFocus
             placeholder="Search images and photos"
-            value={this.state.imageName}
-            onChange={this.handleNameChange}
+            value={this.state.search}
+            name="search"
+            onChange={this.handleChange}
           />
         </form>
       </header>
