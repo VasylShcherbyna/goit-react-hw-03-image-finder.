@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Searchbar from './Componnent/Searchbar/Searchbar';
@@ -9,20 +9,21 @@ import Loader from './Componnent/Loader/Loader';
 import Modal from './Componnent/Modal/Modal';
 import styles from './App.module.css';
 
-export default function App(){
+export default class App extends Component {
   static defaultProps = {};
 
   static propTypes = {};
 
-  const [images, setImages] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [search, setSearch] = useState('');
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [largeImageId, setLargeImageId] = useState(null);
-  const [largeImage, setLargeImage] = useState([]);
-
+  state = {
+    images: [],
+    pageNumber: 1,
+    search: '',
+    error: null,
+    isLoading: false,
+    isModalOpen: false,
+    largeImageId: null,
+    largeImage: [],
+  };
 
   componentDidMount() {}
   componentDidUpdate(prevProps, prevState) {
@@ -68,20 +69,23 @@ export default function App(){
       });
   };
 
-  const findPic = () => {
-    const largeImg = images.find(image => {
-      return image.id === largeImageId;
+  findPic = () => {
+    const largeImg = this.state.images.find(image => {
+      return image.id === this.state.largeImageId;
     });
     return largeImg;
   };
 
-  const openModal = e => {
-    setIsModalOpen(true),
-      setLargeImageId(Number(e.currentTarget.id)),
+  openModal = e => {
+    this.setState({
+      isModalOpen: true,
+      largeImageId: Number(e.currentTarget.id),
+    });
   };
-  closeModal = () => setIsModalOpen(false) ;
+  closeModal = () => this.setState({ isModalOpen: false });
 
-  
+  render() {
+    const { isLoading, images, isModalOpen, largeImageId } = this.state;
 
     return (
       <div className={styles.App}>
@@ -90,23 +94,23 @@ export default function App(){
             No pictures were found for your query
           </h2>
         )}
-        <Searchbar onSubmit={onSearch} />
-        <ImageGallery openModal={openModal} images={images} />
+        <Searchbar onSubmit={this.onSearch} />
+        <ImageGallery openModal={this.openModal} images={images} />
         {isLoading && <Loader />}
         {images.length > 0 ? (
-          <Button fetchImages={fetchImagesWithScroll} />
+          <Button fetchImages={this.fetchImagesWithScroll} />
         ) : (
           <div className={styles.Warning}>
             You have to write down right word for search
           </div>
         )}
         {isModalOpen && (
-          <Modal largeImageId={largeImageId} onClose={closeModal}>
-            <img src={findPic().largeImageURL} alt={findPic().tags} />
+          <Modal largeImageId={largeImageId} onClose={this.closeModal}>
+            <img src={this.findPic().largeImageURL} alt={this.findPic().tags} />
           </Modal>
         )}
         <ToastContainer position="top-center" autoClose={2000} />
       </div>
     );
   }
-
+}
