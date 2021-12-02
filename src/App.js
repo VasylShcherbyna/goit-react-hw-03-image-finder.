@@ -9,11 +9,7 @@ import Loader from './Componnent/Loader/Loader';
 import Modal from './Componnent/Modal/Modal';
 import styles from './App.module.css';
 
-export default function App(){
-  static defaultProps = {};
-
-  static propTypes = {};
-
+export default function App() {
   const [images, setImages] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [search, setSearch] = useState('');
@@ -23,39 +19,33 @@ export default function App(){
   const [largeImageId, setLargeImageId] = useState(null);
   const [largeImage, setLargeImage] = useState([]);
 
+  useEffect(() => {
+    fetchImages(false);
+  }, [search]);
 
-  componentDidMount() {}
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.search !== this.state.search) {
-      this.fetchImages(false);
-    }
-  }
-
-  onSearch = search => {
-    this.setState({ search, images: [], pageNumber: 1 });
+  const onSearch = search => {
+    setSearch(search, images([]), pageNumber(1));
   };
 
-  fetchImagesWithScroll = () => {
-    this.fetchImages(true);
+  const fetchImagesWithScroll = () => {
+    fetchImages(true);
   };
 
-  fetchImages = scroll => {
-    this.setState({ isLoading: true });
-    const { search, pageNumber } = this.state;
+   const fetchImages = scroll => {
+    setIsLoading(true);
     imagesApi
       .fetchImages(search, pageNumber)
-      .then(images => {
-        this.setState(state => ({
-          images: [...state.images, ...images],
-          pageNumber: state.pageNumber + 1,
-        }));
-        return images[0];
-      })
+      .then(
+        prevState => [...prevState, images],
+        pageNumber(pageNumber + 1),
+
+        // return images[0]
+      )
       .catch(error => {
-        this.setState({ error });
+        setError(error);
       })
       .finally(() => {
-        this.setState({ isLoading: false });
+        setIsLoading(false);
       })
       .then(firstLoadedImage => {
         if (scroll) {
@@ -76,37 +66,32 @@ export default function App(){
   };
 
   const openModal = e => {
-    setIsModalOpen(true),
-      setLargeImageId(Number(e.currentTarget.id)),
+    setIsModalOpen(true);
+    setLargeImageId(Number(e.currentTarget.id));
   };
-  closeModal = () => setIsModalOpen(false) ;
+  const closeModal = () => setIsModalOpen(false);
 
-  
-
-    return (
-      <div className={styles.App}>
-        {this.state.error && (
-          <h2 className={styles.error}>
-            No pictures were found for your query
-          </h2>
-        )}
-        <Searchbar onSubmit={onSearch} />
-        <ImageGallery openModal={openModal} images={images} />
-        {isLoading && <Loader />}
-        {images.length > 0 ? (
-          <Button fetchImages={fetchImagesWithScroll} />
-        ) : (
-          <div className={styles.Warning}>
-            You have to write down right word for search
-          </div>
-        )}
-        {isModalOpen && (
-          <Modal largeImageId={largeImageId} onClose={closeModal}>
-            <img src={findPic().largeImageURL} alt={findPic().tags} />
-          </Modal>
-        )}
-        <ToastContainer position="top-center" autoClose={2000} />
-      </div>
-    );
-  }
-
+  return (
+    <div className={styles.App}>
+      {error && (
+        <h2 className={styles.error}>No pictures were found for your query</h2>
+      )}
+      <Searchbar onSubmit={onSearch} />
+      <ImageGallery openModal={openModal} images={images} />
+      {isLoading && <Loader />}
+      {images.length > 0 ? (
+        <Button fetchImages={fetchImagesWithScroll} />
+      ) : (
+        <div className={styles.Warning}>
+          You have to write down right word for search
+        </div>
+      )}
+      {isModalOpen && (
+        <Modal largeImageId={largeImageId} onClose={closeModal}>
+          <img src={findPic().largeImageURL} alt={findPic().tags} />
+        </Modal>
+      )}
+      <ToastContainer position="top-center" autoClose={2000} />
+    </div>
+  );
+}
