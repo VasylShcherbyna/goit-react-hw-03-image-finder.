@@ -24,23 +24,27 @@ export default function App() {
   }, [search]);
 
   const onSearch = search => {
-    setSearch(search, images([]), pageNumber(1));
+    setSearch(search);
+    setImages([]);
+    setPageNumber(1);
   };
 
   const fetchImagesWithScroll = () => {
     fetchImages(true);
   };
 
-   const fetchImages = scroll => {
+  const fetchImages = scroll => {
     setIsLoading(true);
     imagesApi
       .fetchImages(search, pageNumber)
-      .then(
-        prevState => [...prevState, images],
-        pageNumber(pageNumber + 1),
+      .then(images => {
+        setImages(
+          state => [...state, ...images],
+          setPageNumber(pageNumber + 1),
+        );
+        return images[0];
+      })
 
-        // return images[0]
-      )
       .catch(error => {
         setError(error);
       })
