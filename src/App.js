@@ -37,12 +37,10 @@ export default function App() {
     setIsLoading(true);
     imagesApi
       .fetchImages(search, pageNumber)
-      .then(images => {
-        setImages(
-          state => [...state, ...images],
-          setPageNumber(pageNumber + 1),
-        );
-        return images[0];
+      .then(arr => {
+        setImages([...images, ...arr],
+          setPageNumber(pageNumber + 1));
+        return arr[0];
       })
 
       .catch(error => {
