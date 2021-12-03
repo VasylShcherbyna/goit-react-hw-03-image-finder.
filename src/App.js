@@ -38,8 +38,12 @@ export default function App() {
     imagesApi
       .fetchImages(search, pageNumber)
       .then(arr => {
-        setImages([...images, ...arr],
-          setPageNumber(pageNumber + 1));
+        setImages(prevState => 
+          [...prevState, ...arr],
+          setPageNumber(prevState => prevState + 1),
+          
+         
+        );
         return arr[0];
       })
 
