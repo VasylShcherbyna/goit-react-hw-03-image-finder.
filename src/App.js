@@ -20,6 +20,7 @@ export default function App() {
   const [largeImage, setLargeImage] = useState([]);
 
   useEffect(() => {
+    if (!search) return;
     fetchImages(false);
   }, [search]);
 
@@ -38,11 +39,9 @@ export default function App() {
     imagesApi
       .fetchImages(search, pageNumber)
       .then(arr => {
-        setImages(prevState => 
-          [...prevState, ...arr],
+        setImages(
+          prevState => [...prevState, ...arr],
           setPageNumber(prevState => prevState + 1),
-          
-         
         );
         return arr[0];
       })
